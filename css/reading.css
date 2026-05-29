@@ -1,0 +1,72 @@
+/* Reading mode — all rules scoped to body[data-mode='read'] */
+
+/* ── Layout ──────────────────────────────────────────────────────────── */
+body[data-mode='read'] .app-shell {
+  grid-template-columns: 1fr;
+}
+
+body[data-mode='read'] #sidebar {
+  display: none;
+}
+
+body[data-mode='read'] .editor-panel {
+  min-block-size: 100vh;
+}
+
+/* ── Hide editor chrome ───────────────────────────────────────────────── */
+body[data-mode='read'] #toolbar {
+  display: none;
+}
+
+body[data-mode='read'] .block__actions {
+  display: none;
+}
+
+body[data-mode='read'] .block__copy-btn {
+  display: none;
+}
+
+body[data-mode='read'] .block__drag-handle {
+  display: none;
+}
+
+/* ── Content area ────────────────────────────────────────────────────── */
+body[data-mode='read'] .editor-content {
+  margin-inline: auto;
+  max-inline-size: 680px;
+  padding-block: var(--space-16);
+  padding-inline: var(--space-8);
+}
+
+/* ── Document title in read mode ─────────────────────────────────────── */
+body[data-mode='read'] .doc-title {
+  pointer-events: none;
+  user-select: text;
+}
+
+/* ── Block content in read mode ──────────────────────────────────────── */
+body[data-mode='read'] .block__content {
+  pointer-events: none;
+  user-select: text;
+}
+
+/* ── Reading typography ──────────────────────────────────────────────── */
+body[data-mode='read'] .block__body {
+  padding-inline-start: 0;
+}
+
+body[data-mode='read'] .block[data-block-type='paragraph'] .block__content {
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  line-height: 1.8;
+}
+
+/* Code blocks still allow copy */
+body[data-mode='read'] .block[data-block-type='code'] .block__body {
+  padding-block-end: var(--space-4);
+}
+
+/* ── Checklist in read mode ──────────────────────────────────────────── */
+body[data-mode='read'] .block[data-block-type='checklist'] input[type='checkbox'] {
+  pointer-events: none;
+}

@@ -1,0 +1,180 @@
+/* ── Main panel ──────────────────────────────────────────────────────── */
+.main {
+  background-color: var(--color-surface);
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100vh;
+}
+
+/* ── Welcome state ───────────────────────────────────────────────────── */
+.editor-welcome {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  padding-block: var(--space-16);
+  padding-inline: var(--space-6);
+}
+
+.editor-welcome__inner {
+  max-inline-size: 360px;
+  text-align: center;
+}
+
+.editor-welcome__heading {
+  color: var(--color-text);
+  font-family: var(--font-ui);
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.editor-welcome__sub {
+  color: var(--color-muted);
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  margin-block-start: var(--space-2);
+}
+
+/* ── Editor panel ────────────────────────────────────────────────────── */
+.editor-panel {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100vh;
+}
+
+/* ── Toolbar ─────────────────────────────────────────────────────────── */
+.toolbar {
+  align-items: center;
+  background-color: var(--color-surface);
+  border-block-end: 1px solid rgba(0 0 0 / 8%);
+  display: flex;
+  gap: var(--space-2);
+  inset-block-start: 0;
+  padding-block: var(--space-2);
+  padding-inline: var(--space-4);
+  position: sticky;
+  z-index: 10;
+}
+
+.toolbar__group {
+  align-items: center;
+  display: flex;
+  gap: var(--space-1);
+}
+
+.toolbar__group--left {
+  flex-shrink: 0;
+}
+
+.toolbar__group--center {
+  flex: 1;
+  justify-content: center;
+}
+
+.toolbar__group--right {
+  flex-shrink: 0;
+  gap: var(--space-1);
+}
+
+/* Toolbar buttons */
+.toolbar__btn {
+  align-items: center;
+  border-radius: var(--radius-sm);
+  color: var(--color-muted);
+  cursor: pointer;
+  display: flex;
+  padding: var(--space-1);
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.toolbar__btn:hover {
+  background-color: rgba(0 0 0 / 6%);
+  color: var(--color-text);
+}
+
+.toolbar__btn:focus-visible {
+  color: var(--color-text);
+}
+
+.toolbar__btn[aria-pressed='true'] {
+  background-color: rgba(180 83 9 / 10%);
+  color: var(--color-accent);
+}
+
+.toolbar__btn--danger:hover {
+  background-color: rgba(220 38 38 / 10%);
+  color: #dc2626;
+}
+
+/* Last-saved indicator */
+.toolbar__last-saved {
+  color: var(--color-muted);
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+}
+
+/* ── Editor content area ─────────────────────────────────────────────── */
+.editor-content {
+  inline-size: 100%;
+  margin-inline: auto;
+  max-inline-size: 720px;
+  padding-block: var(--space-8) var(--space-16);
+  padding-inline: var(--space-8);
+}
+
+/* ── Document title ──────────────────────────────────────────────────── */
+.doc-title {
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-block-end: var(--space-6);
+  outline: none;
+  word-break: break-word;
+}
+
+.doc-title:empty::before {
+  color: var(--color-muted);
+  content: attr(data-placeholder);
+  pointer-events: none;
+}
+
+.doc-title:focus-visible {
+  outline: none;
+}
+
+/* ── Block list ──────────────────────────────────────────────────────── */
+.block-list {
+  min-block-size: 200px;
+}
+
+/* ── Share banner ────────────────────────────────────────────────────── */
+.share-banner {
+  background-color: var(--color-callout-bg);
+  border-block-end: 1px solid #d97706;
+  color: var(--color-text);
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  padding-block: var(--space-3);
+  padding-inline: var(--space-6);
+  text-align: center;
+}
+
+/* ── Share toast ─────────────────────────────────────────────────────── */
+.share-toast {
+  background-color: var(--color-text);
+  border-radius: var(--radius-md);
+  color: #fff;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: 500;
+  inset-block-end: var(--space-6);
+  inset-inline-end: var(--space-6);
+  padding-block: var(--space-2);
+  padding-inline: var(--space-4);
+  position: fixed;
+  z-index: 500;
+}

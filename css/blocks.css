@@ -1,0 +1,312 @@
+/* ── Block wrapper ───────────────────────────────────────────────────── */
+.block {
+  display: flex;
+  gap: var(--space-1);
+  margin-block-end: var(--space-1);
+  position: relative;
+}
+
+/* ── Drag handle ─────────────────────────────────────────────────────── */
+.block__drag-handle {
+  align-items: center;
+  border-radius: var(--radius-sm);
+  color: var(--color-muted);
+  cursor: grab;
+  display: flex;
+  flex-shrink: 0;
+  inset-block-start: 0.2em;
+  opacity: 0;
+  padding: 2px;
+  position: relative;
+  transition: opacity var(--transition-fast);
+}
+
+.block__drag-handle:active {
+  cursor: grabbing;
+}
+
+.block__drag-handle:focus-visible {
+  color: var(--color-text);
+  opacity: 1;
+}
+
+.block__drag-handle:hover {
+  background-color: rgba(0 0 0 / 6%);
+  color: var(--color-text);
+}
+
+.block:hover .block__drag-handle,
+.block:focus-within .block__drag-handle {
+  opacity: 1;
+}
+
+/* ── Block actions (move up/down, type change) ───────────────────────── */
+.block__actions {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 2px;
+  inset-block-start: 0;
+  opacity: 0;
+  position: relative;
+  visibility: hidden;
+}
+
+.block:focus-within .block__actions {
+  opacity: 1;
+  visibility: visible;
+}
+
+.block__move-up,
+.block__move-down,
+.block__type-trigger {
+  align-items: center;
+  border-radius: var(--radius-sm);
+  color: var(--color-muted);
+  cursor: pointer;
+  display: flex;
+  font-family: var(--font-ui);
+  font-size: 0.6875rem;
+  padding: 2px 4px;
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.block__move-up:hover,
+.block__move-down:hover,
+.block__type-trigger:hover {
+  background-color: rgba(0 0 0 / 6%);
+  color: var(--color-text);
+}
+
+/* ── Block body ──────────────────────────────────────────────────────── */
+.block__body {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+/* ── Content (contenteditable) ───────────────────────────────────────── */
+.block__content {
+  caret-color: var(--color-accent);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  min-block-size: 1.75em;
+  outline: none;
+  word-break: break-word;
+}
+
+.block__content:empty::before {
+  color: var(--color-muted);
+  content: attr(data-placeholder);
+  pointer-events: none;
+}
+
+/* ── Paragraph ───────────────────────────────────────────────────────── */
+.block[data-block-type='paragraph'] .block__content {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+}
+
+/* ── Headings ────────────────────────────────────────────────────────── */
+.block[data-block-type='heading1'] .block__content {
+  font-family: var(--font-body);
+  font-size: 1.875rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-block-start: var(--space-4);
+}
+
+.block[data-block-type='heading2'] .block__content {
+  font-family: var(--font-body);
+  font-size: 1.375rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-block-start: var(--space-3);
+}
+
+.block[data-block-type='heading3'] .block__content {
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-block-start: var(--space-2);
+}
+
+/* ── Callout ─────────────────────────────────────────────────────────── */
+.block[data-block-type='callout'] .block__body {
+  background-color: var(--color-callout-bg);
+  border-radius: var(--radius-md);
+  display: flex;
+  gap: var(--space-3);
+  padding-block: var(--space-3);
+  padding-inline: var(--space-4);
+}
+
+.block__callout-icon {
+  flex-shrink: 0;
+  font-size: 1.125rem;
+  line-height: 1.75;
+}
+
+/* ── Code block ──────────────────────────────────────────────────────── */
+.block[data-block-type='code'] .block__body {
+  background-color: var(--color-code-bg);
+  border-radius: var(--radius-md);
+  padding-block: var(--space-4);
+  padding-inline: var(--space-4);
+  position: relative;
+}
+
+.block[data-block-type='code'] .block__content {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.block__code-lang {
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  inset-block-start: var(--space-2);
+  inset-inline-end: var(--space-8);
+  position: absolute;
+}
+
+.block__copy-btn {
+  border-radius: var(--radius-sm);
+  color: var(--color-muted);
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  inset-block-start: var(--space-2);
+  inset-inline-end: var(--space-2);
+  padding-block: 2px;
+  padding-inline: var(--space-2);
+  position: absolute;
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.block__copy-btn:hover {
+  background-color: rgba(0 0 0 / 8%);
+  color: var(--color-text);
+}
+
+/* ── Checklist ───────────────────────────────────────────────────────── */
+.block[data-block-type='checklist'] .block__body {
+  align-items: flex-start;
+  display: flex;
+  gap: var(--space-2);
+  padding-block-start: 0.2em;
+}
+
+.block[data-block-type='checklist'] input[type='checkbox'] {
+  accent-color: var(--color-accent);
+  block-size: 1.125em;
+  cursor: pointer;
+  flex-shrink: 0;
+  inline-size: 1.125em;
+  margin-block-start: 0.3em;
+}
+
+.block[data-block-type='checklist'][data-checked='true'] .block__content {
+  color: var(--color-muted);
+  text-decoration: line-through;
+}
+
+/* ── Divider ─────────────────────────────────────────────────────────── */
+.block[data-block-type='divider'] .block__body {
+  padding-block: var(--space-2);
+}
+
+.block[data-block-type='divider'] hr {
+  border: none;
+  border-block-start: 2px solid rgba(0 0 0 / 10%);
+}
+
+/* ── Inline formatting ───────────────────────────────────────────────── */
+.block__content strong {
+  font-weight: 700;
+}
+
+.block__content em {
+  font-style: italic;
+}
+
+.block__content code {
+  background-color: var(--color-code-bg);
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  padding-block: 1px;
+  padding-inline: 4px;
+}
+
+/* ── Drag-over indicator ─────────────────────────────────────────────── */
+.block.drag-over-top {
+  border-block-start: 2px solid var(--color-accent);
+}
+
+.block.drag-over-bottom {
+  border-block-end: 2px solid var(--color-accent);
+}
+
+/* ── Slash command menu ──────────────────────────────────────────────── */
+.slash-menu {
+  background-color: var(--color-surface);
+  border: 1px solid rgba(0 0 0 / 10%);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 24px rgba(0 0 0 / 12%);
+  inline-size: 260px;
+  max-block-size: 320px;
+  overflow-y: auto;
+  padding-block: var(--space-1);
+  position: fixed;
+  z-index: 200;
+}
+
+.slash-menu__item {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  gap: var(--space-3);
+  padding-block: var(--space-2);
+  padding-inline: var(--space-3);
+  transition: background-color var(--transition-fast);
+}
+
+.slash-menu__item:hover,
+.slash-menu__item[aria-selected='true'] {
+  background-color: var(--color-callout-bg);
+}
+
+.slash-menu__item-icon {
+  align-items: center;
+  background-color: var(--color-code-bg);
+  block-size: 2rem;
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  display: flex;
+  flex-shrink: 0;
+  inline-size: 2rem;
+  justify-content: center;
+}
+
+.slash-menu__item-label {
+  color: var(--color-text);
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.slash-menu__item-desc {
+  color: var(--color-muted);
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  margin-block-start: 1px;
+}

@@ -1,0 +1,171 @@
+/* ── Sidebar panel ───────────────────────────────────────────────────── */
+.sidebar {
+  background-color: var(--color-sidebar);
+  block-size: 100vh;
+  border-inline-end: 1px solid rgba(0 0 0 / 8%);
+  display: flex;
+  flex-direction: column;
+  inline-size: var(--sidebar-width);
+  inset-block-start: 0;
+  overflow: hidden;
+  position: sticky;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────── */
+.sidebar__header {
+  border-block-end: 1px solid rgba(0 0 0 / 8%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-block: var(--space-4);
+  padding-inline: var(--space-4);
+}
+
+.sidebar__logo {
+  color: var(--color-text);
+  font-family: var(--font-ui);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.sidebar__new-btn {
+  align-items: center;
+  background-color: var(--color-accent);
+  border-radius: var(--radius-md);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: 500;
+  gap: var(--space-2);
+  justify-content: center;
+  padding-block: var(--space-2);
+  padding-inline: var(--space-3);
+  transition: background-color var(--transition-fast);
+}
+
+.sidebar__new-btn:hover {
+  background-color: #92400e;
+}
+
+.sidebar__new-btn:focus-visible {
+  background-color: #92400e;
+  outline-offset: 3px;
+}
+
+/* ── Body / scrollable list area ─────────────────────────────────────── */
+.sidebar__body {
+  flex: 1;
+  overflow-y: auto;
+  padding-block: var(--space-2);
+}
+
+/* ── Empty state ─────────────────────────────────────────────────────── */
+.sidebar__empty {
+  padding-block: var(--space-8);
+  padding-inline: var(--space-4);
+  text-align: center;
+}
+
+.sidebar__empty-text {
+  color: var(--color-text);
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.sidebar__empty-sub {
+  color: var(--color-muted);
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  margin-block-start: var(--space-1);
+}
+
+/* ── Document list ───────────────────────────────────────────────────── */
+.doc-list {
+  padding-inline: var(--space-2);
+}
+
+.doc-list__item {
+  border-radius: var(--radius-sm);
+  display: flex;
+  margin-block-end: var(--space-1);
+  position: relative;
+}
+
+.doc-list__item:hover {
+  background-color: rgba(0 0 0 / 5%);
+}
+
+.doc-list__item[data-active='true'] {
+  background-color: rgba(0 0 0 / 8%);
+}
+
+.doc-list__item[data-active='true']::before {
+  background-color: var(--color-accent);
+  block-size: 100%;
+  border-radius: 2px 0 0 2px;
+  content: '';
+  inline-size: 3px;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  position: absolute;
+}
+
+/* Open-document button (fills item, minus delete area) */
+.doc-list__item-btn {
+  cursor: pointer;
+  flex: 1;
+  min-inline-size: 0;
+  padding-block: var(--space-2);
+  padding-inline: var(--space-3);
+  text-align: start;
+}
+
+.doc-list__item-title {
+  color: var(--color-text);
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.doc-list__item-time {
+  color: var(--color-muted);
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  margin-block-start: 0.125rem;
+}
+
+/* Delete button (revealed on item hover/focus-within) */
+.doc-list__item-delete {
+  align-items: center;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--color-muted);
+  cursor: pointer;
+  display: flex;
+  flex-shrink: 0;
+  opacity: 0;
+  padding-inline: var(--space-2);
+  transition: opacity var(--transition-fast);
+}
+
+.doc-list__item-delete:focus-visible {
+  opacity: 1;
+  outline-offset: -2px;
+}
+
+.doc-list__item-delete:hover {
+  color: #dc2626;
+}
+
+.doc-list__item:hover .doc-list__item-delete,
+.doc-list__item:focus-within .doc-list__item-delete {
+  opacity: 1;
+}

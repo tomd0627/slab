@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Slab</title>
+    <meta
+      name="description"
+      content="Slab — a block-based document editor. Create, organise, and share structured notes."
+    />
+
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400..700;1,400..700&display=swap"
+    />
+
+    <!-- Application styles -->
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/sidebar.css" />
+    <link rel="stylesheet" href="css/editor.css" />
+    <link rel="stylesheet" href="css/blocks.css" />
+    <link rel="stylesheet" href="css/reading.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <noscript>
+      <div class="noscript-warning">
+        <p>Slab requires JavaScript to run. Please enable JavaScript in your browser settings.</p>
+      </div>
+    </noscript>
+
+    <div class="app-shell">
+      <!-- ── Sidebar ────────────────────────────────────────────────── -->
+      <nav id="sidebar" class="sidebar" aria-label="Documents">
+        <div class="sidebar__header">
+          <span class="sidebar__logo">Slab</span>
+          <button
+            type="button"
+            id="new-doc-btn"
+            class="sidebar__new-btn"
+            aria-label="Create new document"
+          >
+            <svg class="icon" aria-hidden="true" focusable="false" width="20" height="20">
+              <use href="assets/icons.svg#icon-plus" />
+            </svg>
+            New document
+          </button>
+        </div>
+
+        <div class="sidebar__body">
+          <div id="sidebar-empty" class="sidebar__empty" hidden>
+            <p class="sidebar__empty-text">No documents yet.</p>
+            <p class="sidebar__empty-sub">Create your first one to get started.</p>
+          </div>
+
+          <ul id="doc-list" class="doc-list"></ul>
+        </div>
+      </nav>
+
+      <!-- ── Main content ──────────────────────────────────────────── -->
+      <main id="main" class="main" tabindex="-1">
+        <!-- Welcome state (no document open) -->
+        <div id="editor-welcome" class="editor-welcome">
+          <div class="editor-welcome__inner">
+            <p class="editor-welcome__heading">Welcome to Slab</p>
+            <p class="editor-welcome__sub">
+              Select a document from the sidebar, or create a new one to begin writing.
+            </p>
+          </div>
+        </div>
+
+        <!-- Editor panel (shown when a document is open) -->
+        <div id="editor-panel" class="editor-panel" hidden>
+          <!-- Share URL banner (shown when document is loaded from a shared URL) -->
+          <div id="share-banner" class="share-banner" hidden>
+            <p>You are viewing a shared document in read-only mode.</p>
+          </div>
+
+          <!-- Toolbar -->
+          <div id="toolbar" class="toolbar" role="toolbar" aria-label="Document toolbar">
+            <div class="toolbar__group toolbar__group--left">
+              <button
+                type="button"
+                id="toggle-sidebar-btn"
+                class="toolbar__btn"
+                aria-label="Toggle sidebar"
+                aria-expanded="true"
+                aria-controls="sidebar"
+              >
+                <svg class="icon" aria-hidden="true" focusable="false" width="20" height="20">
+                  <use href="assets/icons.svg#icon-bars-3" />
+                </svg>
+              </button>
+            </div>
+            <div class="toolbar__group toolbar__group--center">
+              <span id="last-saved" class="toolbar__last-saved"></span>
+            </div>
+            <div class="toolbar__group toolbar__group--right">
+              <button
+                type="button"
+                id="mode-toggle-btn"
+                class="toolbar__btn"
+                aria-label="Switch to reading mode"
+                aria-pressed="false"
+              >
+                <svg class="icon" aria-hidden="true" focusable="false" width="20" height="20">
+                  <use href="assets/icons.svg#icon-eye" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                id="share-btn"
+                class="toolbar__btn"
+                aria-label="Copy shareable link"
+              >
+                <svg class="icon" aria-hidden="true" focusable="false" width="20" height="20">
+                  <use href="assets/icons.svg#icon-link" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                id="export-btn"
+                class="toolbar__btn"
+                aria-label="Export as Markdown"
+              >
+                <svg class="icon" aria-hidden="true" focusable="false" width="20" height="20">
+                  <use href="assets/icons.svg#icon-arrow-down-tray" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                id="delete-doc-btn"
+                class="toolbar__btn toolbar__btn--danger"
+                aria-label="Delete this document"
+              >
+                <svg class="icon" aria-hidden="true" focusable="false" width="20" height="20">
+                  <use href="assets/icons.svg#icon-trash" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Centered document content area -->
+          <div class="editor-content">
+            <!-- Document title -->
+            <div
+              id="doc-title"
+              class="doc-title"
+              contenteditable="true"
+              role="textbox"
+              aria-label="Document title"
+              aria-multiline="false"
+              data-placeholder="Untitled Document"
+              spellcheck="true"
+            ></div>
+
+            <!-- Block list -->
+            <div
+              id="block-list"
+              class="block-list"
+              role="region"
+              aria-label="Document blocks"
+            ></div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Slash command menu (portal — positioned by JS) -->
+    <div
+      id="slash-menu"
+      class="slash-menu"
+      role="listbox"
+      aria-label="Choose a block type"
+      hidden
+    ></div>
+
+    <!-- Share confirmation toast -->
+    <div id="share-toast" class="share-toast" role="status" hidden>Link copied to clipboard</div>
+
+    <!-- Third-party dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/idb-keyval@6.2.1/dist/umd.js"></script>
+
+    <!-- Application scripts (strict dependency order) -->
+    <script src="js/db.js"></script>
+    <script src="js/blocks.js"></script>
+    <script src="js/drag.js"></script>
+    <script src="js/share.js"></script>
+    <script src="js/export.js"></script>
+    <script src="js/editor.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

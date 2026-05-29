@@ -1,0 +1,40 @@
+{
+  "name": "slab",
+  "version": "1.0.0",
+  "description": "Collaborative block-based writing and structured notes app",
+  "type": "module",
+  "scripts": {
+    "lint:js": "eslint js/",
+    "lint:css": "stylelint css/**/*.css",
+    "lint:html": "html-validate index.html",
+    "lint": "npm run lint:js && npm run lint:css && npm run lint:html",
+    "format": "prettier --write \"**/*.{html,css,js}\"",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "globals": "^15.0.0",
+    "html-validate": "^9.0.0",
+    "husky": "^9.0.0",
+    "lint-staged": "^15.0.0",
+    "prettier": "^3.0.0",
+    "stylelint": "^16.0.0",
+    "stylelint-config-standard": "^36.0.0",
+    "stylelint-order": "^6.0.0"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.css": [
+      "stylelint --fix",
+      "prettier --write"
+    ],
+    "*.html": [
+      "html-validate",
+      "prettier --write"
+    ]
+  }
+}
