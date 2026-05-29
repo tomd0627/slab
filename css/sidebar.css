@@ -69,6 +69,15 @@
   text-align: center;
 }
 
+.sidebar__empty-icon {
+  block-size: 2rem;
+  color: var(--color-muted);
+  inline-size: 2rem;
+  margin-block-end: var(--space-3);
+  margin-inline: auto;
+  opacity: 0.5;
+}
+
 .sidebar__empty-text {
   color: var(--color-text);
   font-family: var(--font-ui);
@@ -168,4 +177,10 @@
 .doc-list__item:hover .doc-list__item-delete,
 .doc-list__item:focus-within .doc-list__item-delete {
   opacity: 1;
+}
+
+@media (hover: none) {
+  .doc-list__item-delete {
+    opacity: 1;
+  }
 }

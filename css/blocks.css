@@ -52,25 +52,30 @@
   visibility: hidden;
 }
 
-.block:focus-within .block__actions {
+.block:focus-within .block__actions,
+.block:hover .block__actions {
   opacity: 1;
   visibility: visible;
 }
 
 .block__move-up,
 .block__move-down,
-.block__type-trigger {
+.block__type-trigger,
+.block__delete {
   align-items: center;
   border-radius: var(--radius-sm);
   color: var(--color-muted);
   cursor: pointer;
   display: flex;
-  font-family: var(--font-ui);
-  font-size: 0.6875rem;
-  padding: 2px 4px;
+  padding: 3px;
   transition:
     background-color var(--transition-fast),
     color var(--transition-fast);
+}
+
+.block__actions .icon {
+  block-size: 1rem;
+  inline-size: 1rem;
 }
 
 .block__move-up:hover,
@@ -78,6 +83,11 @@
 .block__type-trigger:hover {
   background-color: rgba(0 0 0 / 6%);
   color: var(--color-text);
+}
+
+.block__delete:hover {
+  background-color: rgba(220 38 38 / 10%);
+  color: #dc2626;
 }
 
 /* ── Block body ──────────────────────────────────────────────────────── */
@@ -146,9 +156,9 @@
 }
 
 .block__callout-icon {
+  align-self: flex-start;
   flex-shrink: 0;
-  font-size: 1.125rem;
-  line-height: 1.75;
+  padding-block-start: 0.2em;
 }
 
 /* ── Code block ──────────────────────────────────────────────────────── */
@@ -177,11 +187,14 @@
 }
 
 .block__copy-btn {
+  align-items: center;
   border-radius: var(--radius-sm);
   color: var(--color-muted);
   cursor: pointer;
+  display: flex;
   font-family: var(--font-ui);
   font-size: 0.75rem;
+  gap: 4px;
   inset-block-start: var(--space-2);
   inset-inline-end: var(--space-2);
   padding-block: 2px;
@@ -197,12 +210,21 @@
   color: var(--color-text);
 }
 
+.block__copy-icon {
+  block-size: 0.875rem;
+  inline-size: 0.875rem;
+}
+
 /* ── Checklist ───────────────────────────────────────────────────────── */
 .block[data-block-type='checklist'] .block__body {
+  padding-block-start: 0.2em;
+}
+
+.block[data-block-type='checklist'] .block__body label {
   align-items: flex-start;
   display: flex;
   gap: var(--space-2);
-  padding-block-start: 0.2em;
+  inline-size: 100%;
 }
 
 .block[data-block-type='checklist'] input[type='checkbox'] {
@@ -230,11 +252,13 @@
 }
 
 /* ── Inline formatting ───────────────────────────────────────────────── */
+.block__content b,
 .block__content strong {
   font-weight: 700;
 }
 
-.block__content em {
+.block__content em,
+.block__content i {
   font-style: italic;
 }
 
@@ -309,4 +333,13 @@
   font-family: var(--font-ui);
   font-size: 0.75rem;
   margin-block-start: 1px;
+}
+
+/* ── Mobile: always show block controls (no hover on touch) ──────────── */
+@media (hover: none) {
+  .block__drag-handle,
+  .block__actions {
+    opacity: 1;
+    visibility: visible;
+  }
 }

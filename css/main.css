@@ -150,6 +150,25 @@ button {
   }
 }
 
+/* ── Desktop sidebar toggle ──────────────────────────────────────────── */
+@media (width >= 48rem) {
+  .app-shell.sidebar-collapsed {
+    grid-template-columns: 1fr;
+  }
+
+  .app-shell.sidebar-collapsed #sidebar {
+    display: none;
+  }
+}
+
+/* ── Sidebar backdrop (mobile overlay dismiss) ───────────────────────── */
+.sidebar-backdrop {
+  background-color: rgba(0 0 0 / 40%);
+  inset: 0;
+  position: fixed;
+  z-index: 90;
+}
+
 /* ── Icon base ───────────────────────────────────────────────────────── */
 .icon {
   block-size: 1.25rem;

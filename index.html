@@ -55,6 +55,9 @@
 
         <div class="sidebar__body">
           <div id="sidebar-empty" class="sidebar__empty" hidden>
+            <svg class="icon sidebar__empty-icon" aria-hidden="true" focusable="false">
+              <use href="assets/icons.svg#icon-document-text" />
+            </svg>
             <p class="sidebar__empty-text">No documents yet.</p>
             <p class="sidebar__empty-sub">Create your first one to get started.</p>
           </div>
@@ -72,6 +75,17 @@
             <p class="editor-welcome__sub">
               Select a document from the sidebar, or create a new one to begin writing.
             </p>
+            <button
+              type="button"
+              id="welcome-new-doc-btn"
+              class="welcome__new-btn"
+              aria-label="Create new document"
+            >
+              <svg class="icon" aria-hidden="true" focusable="false" width="20" height="20">
+                <use href="assets/icons.svg#icon-plus" />
+              </svg>
+              New document
+            </button>
           </div>
         </div>
 
@@ -79,6 +93,9 @@
         <div id="editor-panel" class="editor-panel" hidden>
           <!-- Share URL banner (shown when document is loaded from a shared URL) -->
           <div id="share-banner" class="share-banner" hidden>
+            <svg class="icon" aria-hidden="true" focusable="false" width="20" height="20">
+              <use href="assets/icons.svg#icon-eye" />
+            </svg>
             <p>You are viewing a shared document in read-only mode.</p>
           </div>
 
@@ -92,6 +109,7 @@
                 aria-label="Toggle sidebar"
                 aria-expanded="true"
                 aria-controls="sidebar"
+                title="Toggle sidebar"
               >
                 <svg class="icon" aria-hidden="true" focusable="false" width="20" height="20">
                   <use href="assets/icons.svg#icon-bars-3" />
@@ -108,6 +126,7 @@
                 class="toolbar__btn"
                 aria-label="Switch to reading mode"
                 aria-pressed="false"
+                title="Reading mode"
               >
                 <svg class="icon" aria-hidden="true" focusable="false" width="20" height="20">
                   <use href="assets/icons.svg#icon-eye" />
@@ -118,6 +137,7 @@
                 id="share-btn"
                 class="toolbar__btn"
                 aria-label="Copy shareable link"
+                title="Copy shareable link"
               >
                 <svg class="icon" aria-hidden="true" focusable="false" width="20" height="20">
                   <use href="assets/icons.svg#icon-link" />
@@ -128,6 +148,7 @@
                 id="export-btn"
                 class="toolbar__btn"
                 aria-label="Export as Markdown"
+                title="Export as Markdown"
               >
                 <svg class="icon" aria-hidden="true" focusable="false" width="20" height="20">
                   <use href="assets/icons.svg#icon-arrow-down-tray" />
@@ -138,6 +159,7 @@
                 id="delete-doc-btn"
                 class="toolbar__btn toolbar__btn--danger"
                 aria-label="Delete this document"
+                title="Delete document"
               >
                 <svg class="icon" aria-hidden="true" focusable="false" width="20" height="20">
                   <use href="assets/icons.svg#icon-trash" />
@@ -172,6 +194,9 @@
       </main>
     </div>
 
+    <!-- Mobile sidebar backdrop -->
+    <div id="sidebar-backdrop" class="sidebar-backdrop" aria-hidden="true" hidden></div>
+
     <!-- Slash command menu (portal — positioned by JS) -->
     <div
       id="slash-menu"
@@ -183,6 +208,28 @@
 
     <!-- Share confirmation toast -->
     <div id="share-toast" class="share-toast" role="status" hidden>Link copied to clipboard</div>
+
+    <!-- Confirm-delete modal -->
+    <div id="confirm-modal" class="confirm-modal" hidden>
+      <div class="confirm-modal__backdrop" aria-hidden="true"></div>
+      <div
+        class="confirm-modal__dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="confirm-modal-title"
+      >
+        <p id="confirm-modal-title" class="confirm-modal__title"></p>
+        <p id="confirm-modal-msg" class="confirm-modal__msg"></p>
+        <div class="confirm-modal__actions">
+          <button type="button" id="confirm-modal-cancel" class="confirm-modal__btn--cancel">
+            Cancel
+          </button>
+          <button type="button" id="confirm-modal-delete" class="confirm-modal__btn--delete">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
 
     <!-- Third-party dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>

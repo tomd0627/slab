@@ -78,6 +78,7 @@ window.Slab = window.Slab || {};
     handle.setAttribute('tabindex', '0');
     handle.setAttribute('role', 'button');
     handle.setAttribute('aria-label', 'Drag to reorder block');
+    handle.setAttribute('title', 'Drag to reorder');
     handle.innerHTML =
       '<svg class="icon" aria-hidden="true" focusable="false" width="20" height="20">' +
       '<use href="assets/icons.svg#icon-ellipsis-vertical" /></svg>';
@@ -92,21 +93,39 @@ window.Slab = window.Slab || {};
     up.type = 'button';
     up.className = 'block__move-up';
     up.setAttribute('aria-label', 'Move block up');
-    up.textContent = '↑';
+    up.setAttribute('title', 'Move up');
+    up.innerHTML =
+      '<svg class="icon" aria-hidden="true" focusable="false">' +
+      '<use href="assets/icons.svg#icon-arrow-up" /></svg>';
 
     const down = document.createElement('button');
     down.type = 'button';
     down.className = 'block__move-down';
     down.setAttribute('aria-label', 'Move block down');
-    down.textContent = '↓';
+    down.setAttribute('title', 'Move down');
+    down.innerHTML =
+      '<svg class="icon" aria-hidden="true" focusable="false">' +
+      '<use href="assets/icons.svg#icon-arrow-down" /></svg>';
 
     const typeTrigger = document.createElement('button');
     typeTrigger.type = 'button';
     typeTrigger.className = 'block__type-trigger';
     typeTrigger.setAttribute('aria-label', 'Change block type');
-    typeTrigger.textContent = '⊞';
+    typeTrigger.setAttribute('title', 'Change block type');
+    typeTrigger.innerHTML =
+      '<svg class="icon" aria-hidden="true" focusable="false">' +
+      '<use href="assets/icons.svg#icon-squares-2x2" /></svg>';
 
-    actions.append(up, down, typeTrigger);
+    const deleteBtn = document.createElement('button');
+    deleteBtn.type = 'button';
+    deleteBtn.className = 'block__delete';
+    deleteBtn.setAttribute('aria-label', 'Delete block');
+    deleteBtn.setAttribute('title', 'Delete block');
+    deleteBtn.innerHTML =
+      '<svg class="icon" aria-hidden="true" focusable="false">' +
+      '<use href="assets/icons.svg#icon-trash" /></svg>';
+
+    actions.append(up, down, typeTrigger, deleteBtn);
     return actions;
   }
 
@@ -124,7 +143,9 @@ window.Slab = window.Slab || {};
       const icon = document.createElement('span');
       icon.className = 'block__callout-icon';
       icon.setAttribute('aria-hidden', 'true');
-      icon.textContent = '💡';
+      icon.innerHTML =
+        '<svg class="icon" aria-hidden="true" focusable="false" width="20" height="20">' +
+        '<use href="assets/icons.svg#icon-information-circle" /></svg>';
       body.appendChild(icon);
       body.appendChild(buildContent(block));
       return body;
@@ -139,8 +160,11 @@ window.Slab = window.Slab || {};
       const copyBtn = document.createElement('button');
       copyBtn.type = 'button';
       copyBtn.className = 'block__copy-btn';
-      copyBtn.textContent = 'Copy';
       copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
+      copyBtn.innerHTML =
+        '<svg class="icon block__copy-icon" aria-hidden="true" focusable="false">' +
+        '<use href="assets/icons.svg#icon-clipboard" /></svg>' +
+        '<span class="block__copy-label">Copy</span>';
 
       body.appendChild(langLabel);
       body.appendChild(buildContent(block));

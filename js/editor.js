@@ -13,6 +13,7 @@ window.Slab = window.Slab || {};
 
   // ── DOM refs ────────────────────────────────────────────────────────
   let $sidebar,
+    $sidebarBackdrop,
     $docList,
     $sidebarEmpty,
     $newDocBtn,
@@ -26,11 +27,19 @@ window.Slab = window.Slab || {};
     $exportBtn,
     $deleteDocBtn,
     $shareToast,
-    $shareBanner;
+    $shareBanner,
+    $confirmModal,
+    $confirmModalTitle,
+    $confirmModalMsg,
+    $confirmModalDelete,
+    $confirmModalCancel;
+
+  let _confirmResolve = null;
 
   // ── Init ─────────────────────────────────────────────────────────────
   function init() {
     $sidebar = document.getElementById('sidebar');
+    $sidebarBackdrop = document.getElementById('sidebar-backdrop');
     $docList = document.getElementById('doc-list');
     $sidebarEmpty = document.getElementById('sidebar-empty');
     $newDocBtn = document.getElementById('new-doc-btn');
@@ -45,10 +54,29 @@ window.Slab = window.Slab || {};
     $deleteDocBtn = document.getElementById('delete-doc-btn');
     $shareToast = document.getElementById('share-toast');
     $shareBanner = document.getElementById('share-banner');
+    $confirmModal = document.getElementById('confirm-modal');
+    $confirmModalTitle = document.getElementById('confirm-modal-title');
+    $confirmModalMsg = document.getElementById('confirm-modal-msg');
+    $confirmModalDelete = document.getElementById('confirm-modal-delete');
+    $confirmModalCancel = document.getElementById('confirm-modal-cancel');
+
+    $confirmModal
+      .querySelector('.confirm-modal__backdrop')
+      .addEventListener('click', () => _confirmResolve?.(false));
+    $confirmModalCancel.addEventListener('click', () => _confirmResolve?.(false));
+    $confirmModalDelete.addEventListener('click', () => _confirmResolve?.(true));
 
     $newDocBtn.addEventListener('click', newDoc);
+    document.getElementById('welcome-new-doc-btn').addEventListener('click', newDoc);
     $docList.addEventListener('click', handleSidebarClick);
     $toggleSidebarBtn.addEventListener('click', toggleSidebar);
+    $sidebarBackdrop.addEventListener('click', toggleSidebar);
+
+    // On mobile with no active document, open the sidebar so navigation is reachable
+    if (window.innerWidth < 768) {
+      $sidebar.classList.add('is-open');
+      $toggleSidebarBtn.setAttribute('aria-expanded', 'true');
+    }
     $docTitle.addEventListener('input', scheduleSave);
     $modeToggleBtn.addEventListener('click', toggleMode);
     $shareBtn.addEventListener('click', handleShare);
@@ -118,13 +146,6 @@ window.Slab = window.Slab || {};
       return;
     }
 
-    // Mode toggle shortcut
-    if (mod && e.shiftKey && e.key === 'R') {
-      e.preventDefault();
-      toggleMode();
-      return;
-    }
-
     // Enter: create new block or split
     if (e.key === 'Enter' && !e.shiftKey) {
       const type = block.dataset.blockType;
@@ -186,6 +207,7 @@ window.Slab = window.Slab || {};
 
     const typeTrigger = e.target.closest('.block__type-trigger');
     if (typeTrigger) {
+      e.stopPropagation();
       const block = typeTrigger.closest('.block');
       const anchor = block.querySelector('.block__content') || block;
       Slab.blocks.showSlashMenu(anchor, (newType) => {
@@ -195,23 +217,34 @@ window.Slab = window.Slab || {};
       return;
     }
 
+    const deleteBlockBtn = e.target.closest('.block__delete');
+    if (deleteBlockBtn) {
+      const block = deleteBlockBtn.closest('.block');
+      deleteBlock(block);
+      return;
+    }
+
     const copyBtn = e.target.closest('.block__copy-btn');
     if (copyBtn) {
       const block = copyBtn.closest('.block');
       const contentEl = block.querySelector('.block__content');
       const text = contentEl ? contentEl.textContent : '';
+      const label = copyBtn.querySelector('.block__copy-label');
+      const iconUse = copyBtn.querySelector('use');
       navigator.clipboard
         .writeText(text)
         .then(() => {
-          copyBtn.textContent = 'Copied!';
+          if (label) label.textContent = 'Copied!';
+          if (iconUse) iconUse.setAttribute('href', 'assets/icons.svg#icon-check');
           setTimeout(() => {
-            copyBtn.textContent = 'Copy';
+            if (label) label.textContent = 'Copy';
+            if (iconUse) iconUse.setAttribute('href', 'assets/icons.svg#icon-clipboard');
           }, 1500);
         })
         .catch(() => {
-          copyBtn.textContent = 'Failed';
+          if (label) label.textContent = 'Failed';
           setTimeout(() => {
-            copyBtn.textContent = 'Copy';
+            if (label) label.textContent = 'Copy';
           }, 1500);
         });
       return;
@@ -416,6 +449,13 @@ window.Slab = window.Slab || {};
     const doc = await Slab.db.getDoc(id);
     if (!doc) return;
 
+    // On mobile, close the sidebar overlay when opening a document
+    if (window.innerWidth < 768 && $sidebar.classList.contains('is-open')) {
+      $sidebar.classList.remove('is-open');
+      $sidebarBackdrop.hidden = true;
+      $toggleSidebarBtn.setAttribute('aria-expanded', 'false');
+    }
+
     Slab.state.activeDocId = id;
     Slab.state.activeDocCreatedAt = doc.createdAt;
 
@@ -475,11 +515,27 @@ window.Slab = window.Slab || {};
     $lastSaved.textContent = `Saved ${hh}:${mm}`;
   }
 
+  // ── Confirm modal ─────────────────────────────────────────────────────
+  function openConfirm(title, msg) {
+    $confirmModalTitle.textContent = title;
+    $confirmModalMsg.textContent = msg;
+    $confirmModal.hidden = false;
+    $confirmModalCancel.focus();
+    return new Promise((resolve) => {
+      _confirmResolve = (result) => {
+        $confirmModal.hidden = true;
+        _confirmResolve = null;
+        resolve(result);
+      };
+    });
+  }
+
   // ── Delete ───────────────────────────────────────────────────────────
   async function handleDeleteActive() {
     if (!Slab.state.activeDocId) return;
     const title = $docTitle.textContent.trim() || 'Untitled Document';
-    if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
+    const ok = await openConfirm(`Delete "${title}"?`, 'This cannot be undone.');
+    if (!ok) return;
     await deleteDocById(Slab.state.activeDocId);
   }
 
@@ -490,7 +546,8 @@ window.Slab = window.Slab || {};
       const docId = item.dataset.docId;
       const titleEl = item.querySelector('.doc-list__item-title');
       const title = titleEl ? titleEl.textContent : 'Untitled Document';
-      if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
+      const ok = await openConfirm(`Delete "${title}"?`, 'This cannot be undone.');
+      if (!ok) return;
       await deleteDocById(docId);
       return;
     }
@@ -509,6 +566,11 @@ window.Slab = window.Slab || {};
       Slab.state.activeDocCreatedAt = null;
       $editorPanel.hidden = true;
       $editorWelcome.hidden = false;
+      if (window.innerWidth < 768) {
+        $sidebar.classList.add('is-open');
+        $sidebarBackdrop.hidden = false;
+        $toggleSidebarBtn.setAttribute('aria-expanded', 'true');
+      }
     }
     await refreshSidebar();
   }
@@ -539,10 +601,17 @@ window.Slab = window.Slab || {};
     );
   }
 
-  // ── Sidebar visibility (mobile) ───────────────────────────────────────
+  // ── Sidebar visibility ────────────────────────────────────────────────
   function toggleSidebar() {
-    const isOpen = $sidebar.classList.toggle('is-open');
-    $toggleSidebarBtn.setAttribute('aria-expanded', String(isOpen));
+    if (window.innerWidth < 768) {
+      const isOpen = $sidebar.classList.toggle('is-open');
+      $toggleSidebarBtn.setAttribute('aria-expanded', String(isOpen));
+      $sidebarBackdrop.hidden = !isOpen;
+    } else {
+      const $appShell = document.querySelector('.app-shell');
+      const isCollapsed = $appShell.classList.toggle('sidebar-collapsed');
+      $toggleSidebarBtn.setAttribute('aria-expanded', String(!isCollapsed));
+    }
   }
 
   // ── Share ────────────────────────────────────────────────────────────
@@ -580,6 +649,20 @@ window.Slab = window.Slab || {};
 
   // ── Global keyboard ──────────────────────────────────────────────────
   function handleGlobalKeydown(e) {
+    if (!$confirmModal.hidden) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        _confirmResolve?.(false);
+        return;
+      }
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const els = [$confirmModalCancel, $confirmModalDelete];
+        const idx = els.indexOf(document.activeElement);
+        els[(idx + (e.shiftKey ? -1 : 1) + els.length) % els.length].focus();
+        return;
+      }
+    }
     if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'R') {
       e.preventDefault();
       toggleMode();
