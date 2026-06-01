@@ -72,7 +72,7 @@
 .toolbar {
   align-items: center;
   background-color: var(--color-surface);
-  border-block-end: 1px solid rgba(0 0 0 / 8%);
+  border-block-end: 1px solid rgb(0 0 0 / 8%);
   display: flex;
   gap: var(--space-2);
   inset-block-start: 0;
@@ -116,7 +116,7 @@
 }
 
 .toolbar__btn:hover {
-  background-color: rgba(0 0 0 / 6%);
+  background-color: rgb(0 0 0 / 6%);
   color: var(--color-text);
 }
 
@@ -125,12 +125,12 @@
 }
 
 .toolbar__btn[aria-pressed='true'] {
-  background-color: rgba(180 83 9 / 10%);
+  background-color: rgb(180 83 9 / 10%);
   color: var(--color-accent);
 }
 
 .toolbar__btn--danger:hover {
-  background-color: rgba(220 38 38 / 10%);
+  background-color: rgb(220 38 38 / 10%);
   color: #dc2626;
 }
 
@@ -159,7 +159,7 @@
   line-height: 1.2;
   margin-block-end: var(--space-6);
   outline: none;
-  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .doc-title:empty::before {
@@ -216,7 +216,7 @@
 }
 
 .confirm-modal__backdrop {
-  background-color: rgba(0 0 0 / 50%);
+  background-color: rgb(0 0 0 / 50%);
   inset: 0;
   position: absolute;
 }
@@ -224,7 +224,7 @@
 .confirm-modal__dialog {
   background-color: var(--color-surface);
   border-radius: var(--radius-lg);
-  box-shadow: 0 8px 40px rgba(0 0 0 / 20%);
+  box-shadow: 0 8px 40px rgb(0 0 0 / 20%);
   inline-size: calc(100% - var(--space-8));
   inset-block-start: 50%;
   inset-inline-start: 50%;
@@ -270,12 +270,12 @@
 
 .confirm-modal__btn--cancel {
   background-color: transparent;
-  border: 1px solid rgba(0 0 0 / 15%);
+  border: 1px solid rgb(0 0 0 / 15%);
   color: var(--color-text);
 }
 
 .confirm-modal__btn--cancel:hover {
-  background-color: rgba(0 0 0 / 5%);
+  background-color: rgb(0 0 0 / 5%);
 }
 
 .confirm-modal__btn--delete {

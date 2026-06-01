@@ -1,18 +1,21 @@
 {
   "name": "slab",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Collaborative block-based writing and structured notes app",
+  "type": "module",
   "scripts": {
+    "lint:js": "eslint js/",
+    "lint:css": "stylelint css/**/*.css",
+    "lint:html": "html-validate index.html",
+    "lint": "npm run lint:js && npm run lint:css && npm run lint:html",
+    "format": "prettier --write \"**/*.{html,css,js}\"",
     "test": "playwright test",
-    "postinstall": "npx playwright install --with-deps"
+    "test:ui": "playwright test --ui",
+    "prepare": "husky"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@playwright/test": "^1.40.0",
+    "@playwright/test": "^1.60.0",
     "eslint": "^10.4.1",
     "globals": "^17.6.0",
     "html-validate": "^11.5.0",
@@ -22,5 +25,19 @@
     "stylelint": "^17.12.0",
     "stylelint-config-standard": "^40.0.0",
     "stylelint-order": "^8.1.1"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.css": [
+      "stylelint --fix",
+      "prettier --write"
+    ],
+    "*.html": [
+      "html-validate",
+      "prettier --write"
+    ]
   }
 }

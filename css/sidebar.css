@@ -2,7 +2,7 @@
 .sidebar {
   background-color: var(--color-sidebar);
   block-size: 100vh;
-  border-inline-end: 1px solid rgba(0 0 0 / 8%);
+  border-inline-end: 1px solid rgb(0 0 0 / 8%);
   display: flex;
   flex-direction: column;
   inline-size: var(--sidebar-width);
@@ -13,7 +13,7 @@
 
 /* ── Header ──────────────────────────────────────────────────────────── */
 .sidebar__header {
-  border-block-end: 1px solid rgba(0 0 0 / 8%);
+  border-block-end: 1px solid rgb(0 0 0 / 8%);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
@@ -105,11 +105,11 @@
 }
 
 .doc-list__item:hover {
-  background-color: rgba(0 0 0 / 5%);
+  background-color: rgb(0 0 0 / 5%);
 }
 
 .doc-list__item[data-active='true'] {
-  background-color: rgba(0 0 0 / 8%);
+  background-color: rgb(0 0 0 / 8%);
 }
 
 .doc-list__item[data-active='true']::before {
